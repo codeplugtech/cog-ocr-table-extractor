@@ -1,0 +1,16 @@
+build:
+  gpu: false
+  cuda: "11.8"
+  python_version: "3.10"
+  python_packages:
+    - "img2table>=1.2.1"
+    - "pandas>=2.0.3"
+    - "easyocr>=1.7.1"
+    - "torch"
+    - "torchvision"
+  system_packages:
+    - "libgl1-mesa-glx"
+    - "ffmpeg"
+    - "libsm6"
+    - "libxext6"
+predict: "predict.py:Predictor"
