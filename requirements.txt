@@ -1,6 +1,8 @@
 img2table>=1.2.1
 pandas>=2.0.3
 easyocr>=1.7.1
+paddlepaddle-gpu
+img2table[paddle]
 torch
 torchvision
 cog>=0.8.6

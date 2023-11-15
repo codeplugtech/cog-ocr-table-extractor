@@ -1,11 +1,13 @@
 import pathlib
 import tempfile
 
+import pandas as pd
 from cog import BasePredictor, Input, Path
 from img2table.document import Image
 from img2table.document import PDF
 from img2table.ocr import EasyOCR
-import pandas as pd
+from img2table.ocr import PaddleOCR
+from img2table.ocr import TesseractOCR
 
 
 class Predictor(BasePredictor):
@@ -13,6 +15,8 @@ class Predictor(BasePredictor):
             self,
             page_num: int = Input(description="Specify Pdf Pages", default=None),
             merge_table: bool = Input(description="Merge All tables", default=True),
+            ocr_ext: str = Input(description="Select OCR", choices=["Paddleocr", "Easyocr", "Tesseractocr"],
+                                 default="Easyocr"),
             file_path: Path = Input(description="Input file", default=None)
     ) -> Path:
 
@@ -26,8 +30,16 @@ class Predictor(BasePredictor):
         if not file_extension.endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.pdf')):
             raise ValueError('Provide valid file extension')
 
-        ocr = EasyOCR(
-            lang=["en"])
+        match ocr_ext:
+            case "Paddleocr":
+                print("Processing Paddle OCR")
+                ocr = PaddleOCR(lang="en")
+            case "Tesseractocr":
+                print("Processing Tesseract OCR")
+                ocr = TesseractOCR(n_threads=2, lang="eng", psm=11)
+            case "Easyocr" | _:
+                print("Processing Easy OCr")
+                ocr = EasyOCR(lang=["en"])
 
         print("Page number:", page_num)
 
